@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ETLAS | 二手车 & 二手摩托车进出口</title>
+  <meta name="description" content="ETLAS used vehicles export/import: cars & motorcycles" />
+  <style>
+    :root{
+      --bg:#0b0b0f;
+      --card:rgba(255,255,255,.06);
+      --stroke:rgba(255,255,255,.10);
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.72);
+      --accent:#f2d27a;
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,"PingFang SC","Hiragino Sans GB","Noto Sans CJK SC","Microsoft YaHei",sans-serif;
+      color:var(--text);
+      background: radial-gradient(1200px 700px at 10% 0%, rgba(242,210,122,.18), transparent 60%),
+                  radial-gradient(900px 600px at 90% 100%, rgba(255,255,255,.10), transparent 60%),
+                  var(--bg);
+    }
+    a{color:inherit}
+    .top{
+      position:sticky;top:0;z-index:10;
+      background:rgba(11,11,15,.72);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .nav{
+      max-width:1120px;
+      margin:0 auto;
+      padding:14px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .brand{
+      display:flex;align-items:center;gap:10px;
+      text-decoration:none;
+    }
+    .logo{
+      width:36px;height:36px;border-radius:12px;
+      background:linear-gradient(135deg, rgba(242,210,122,.95), rgba(255,255,255,.65));
+      box-shadow:0 10px 24px rgba(0,0,0,.35);
+    }
+    .brand strong{letter-spacing:.5px}
+    .navlinks{display:flex;gap:14px;flex-wrap:wrap}
+    .navlinks a{
+      text-decoration:none;
+      color:rgba(255,255,255,.85);
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+      font-weight:600;
+      font-size:13px;
+    }
+
+    .hero{
+      max-width:1120px;
+      margin:0 auto;
+      padding:34px 16px 10px;
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:18px;
+      align-items:stretch;
+    }
+    .hcard{
+      background:var(--card);
+      border:1px solid var(--stroke);
+      border-radius:22px;
+      padding:22px;
+      box-shadow:0 20px 55px rgba(0,0,0,.40);
+      overflow:hidden;
+      position:relative;
+    }
+    .hcard:before{
+      content:"";
+      position:absolute;inset:-80px;
+      background: radial-gradient(260px 260px at 25% 25%, rgba(242,210,122,.22), transparent 60%);
+      pointer-events:none;
+    }
+    h1{margin:0 0 10px;font-size:26px}
+    .lead{margin:0;color:var(--muted);line-height:1.75}
+    .pillrow{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px}
+    .pill{
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.05);
+      padding:8px 10px;border-radius:999px;
+      font-size:12px;font-weight:700;color:rgba(255,255,255,.88);
+    }
+    .cta{
+      margin-top:18px;
+      display:flex;gap:10px;flex-wrap:wrap;
+    }
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:10px 14px;border-radius:999px;
+      text-decoration:none;font-weight:800;font-size:13px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.06);
+    }
+    .btn.primary{
+      border-color:rgba(242,210,122,.65);
+      background:rgba(242,210,122,.18);
+    }
+    .statgrid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+      margin-top:14px;
+    }
+    .stat{
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:16px;
+      padding:12px;
+    }
+    .stat b{display:block;font-size:16px}
+    .stat span{color:var(--muted);font-size:12px}
+
+    section{
+      max-width:1120px;
+      margin:0 auto;
+      padding:22px 16px;
+    }
+    .section-title{
+      display:flex;align-items:flex-end;justify-content:space-between;gap:10px;
+      margin-bottom:12px;
+    }
+    .section-title h2{margin:0;font-size:18px}
+    .section-title p{margin:0;color:var(--muted);font-size:13px}
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:14px;
+    }
+    .card{
+      background:var(--card);
+      border:1px solid var(--stroke);
+      border-radius:var(--radius);
+      padding:14px;
+      box-shadow:0 14px 40px rgba(0,0,0,.32);
+    }
+    .thumb{
+      width:100%;
+      height:160px;
+      border-radius:14px;
+      border:1px dashed rgba(255,255,255,.20);
+      background:rgba(255,255,255,.03);
+      display:grid;
+      place-items:center;
+      color:rgba(255,255,255,.55);
+      font-size:12px;
+      overflow:hidden;
+    }
+    .thumb img{
+      width:100%;height:100%;object-fit:cover;display:block;
+    }
+    .meta{margin-top:10px}
+    .meta strong{display:block}
+    .meta small{display:block;margin-top:4px;color:var(--muted);line-height:1.55}
+    .tags{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+    .tag{
+      padding:6px 8px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);
+      font-size:12px;font-weight:700;color:rgba(255,255,255,.86);
+    }
+
+    .contact{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+    }
+    .field{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+    label{font-size:12px;color:var(--muted)}
+    input, textarea{
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      padding:10px 12px;
+      outline:none;
+    }
+    textarea{min-height:120px;resize:vertical}
+    .note{color:rgba(255,255,255,.60);font-size:12px;line-height:1.7;margin-top:10px}
+
+    footer{
+      padding:22px 16px 40px;
+      text-align:center;
+      color:rgba(255,255,255,.55);
+      font-size:12px;
+    }
+    @media (max-width:980px){
+      .hero{grid-template-columns:1fr}
+      .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .contact{grid-template-columns:1fr}
+    }
+    @media (max-width:620px){
+      .grid{grid-template-columns:1fr}
+      h1{font-size:22px}
+    }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="nav">
+      <a class="brand" href="index.html" title="返回选择页">
+        <div class="logo" aria-hidden="true"></div>
+        <strong>ETLAS</strong>
+      </a>
+      <nav class="navlinks" aria-label="Page navigation">
+        <a href="#cars">二手车业务</a>
+        <a href="#moto">二手摩托车业务</a>
+        <a href="#stock">现有库存</a>
+        <a href="#contact">联系我们</a>
+        <a href="shiora.html">去 SHIORA</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="hero">
+    <div class="hcard">
+      <h1>ETLAS 二手车 & 二手摩托车进出口</h1>
+      <p class="lead">
+        我们在日本（神户）为海外客户提供：车辆采购、拍卖代购、整备检测、出口报关、海运安排与目的港清关协助。
+        面向中东、中亚、非洲、澳洲等市场，提供稳定的车源与透明的费用结构。
+      </p>
+      <div class="pillrow">
+        <span class="pill">Japan Auctions</span>
+        <span class="pill">Inspection</span>
+        <span class="pill">Export Docs</span>
+        <span class="pill">Shipping</span>
+        <span class="pill">After-sales Support</span>
+      </div>
+      <div class="cta">
+        <a class="btn primary" href="#contact">立即询价 / 采购委托</a>
+        <a class="btn" href="index.html">返回选择页</a>
+      </div>
+    </div>
+
+    <div class="hcard">
+      <div class="section-title" style="margin-bottom:8px">
+        <h2 style="margin:0">服务亮点</h2>
+        <p>可按国家/港口定制流程</p>
+      </div>
+      <div class="statgrid">
+        <div class="stat"><b>拍卖代购</b><span>JBA / USS 等</span></div>
+        <div class="stat"><b>整备/检测</b><span>车况报告/照片视频</span></div>
+        <div class="stat"><b>出口文件</b><span>Invoice / B/L 等</span></div>
+        <div class="stat"><b>海运安排</b><span>RORO / 集装箱</span></div>
+      </div>
+      <p class="note">※ 以上为网站展示文案，可根据你们实际服务范围修改。</p>
+    </div>
+  </div>
+
+  <section id="cars">
+    <div class="section-title">
+      <h2>1) 二手车进出口业务</h2>
+      <p>采购 → 检测 → 出口 → 运输</p>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <div class="thumb">这里放流程图/车辆照片</div>
+        <div class="meta">
+          <strong>日本拍卖行代购</strong>
+          <small>按预算与车型筛选标的，竞拍成功后安排付款、提车与过户。</small>
+        </div>
+        <div class="tags"><span class="tag">Auction</span><span class="tag">Bidding</span></div>
+      </div>
+      <div class="card">
+        <div class="thumb">这里放检查照片</div>
+        <div class="meta">
+          <strong>车况检测与整备</strong>
+          <small>提供外观/内饰/底盘照片、视频；可选更换易损件与清洁整备。</small>
+        </div>
+        <div class="tags"><span class="tag">Inspection</span><span class="tag">Maintenance</span></div>
+      </div>
+      <div class="card">
+        <div class="thumb">这里放船运/港口照片</div>
+        <div class="meta">
+          <strong>出口报关与海运</strong>
+          <small>准备出口所需文件，安排 RORO 或集装箱运输，支持多目的港。</small>
+        </div>
+        <div class="tags"><span class="tag">Export</span><span class="tag">Shipping</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="moto">
+    <div class="section-title">
+      <h2>2) 二手摩托车业务</h2>
+      <p>车型丰富 / 可按需求选配</p>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <div class="thumb">这里放摩托照片</div>
+        <div class="meta">
+          <strong>二手摩托车采购</strong>
+          <small>通勤踏板、运动街车、旅行拉力等，按年份/里程/预算匹配。</small>
+        </div>
+        <div class="tags"><span class="tag">Scooter</span><span class="tag">Bike</span></div>
+      </div>
+      <div class="card">
+        <div class="thumb">这里放整备照片</div>
+        <div class="meta">
+          <strong>整备与打包</strong>
+          <small>可选保养、换油、轮胎检查；出口前加固打包，降低运输风险。</small>
+        </div>
+        <div class="tags"><span class="tag">Service</span><span class="tag">Packing</span></div>
+      </div>
+      <div class="card">
+        <div class="thumb">这里放运输照片</div>
+        <div class="meta">
+          <strong>出口与运输</strong>
+          <small>支持集装箱整车/拼箱运输，文件与流程透明可追踪。</small>
+        </div>
+        <div class="tags"><span class="tag">Container</span><span class="tag">Documents</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="stock">
+    <div class="section-title">
+      <h2>3) 二手车照片与信息（示例）</h2>
+      <p>你把真实照片发我，我帮你替换</p>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <div class="thumb"><!-- <img src="cars/car1.jpg" alt="Car 1"> -->车图 1 占位</div>
+        <div class="meta">
+          <strong>示例：Toyota Voxy Hybrid</strong>
+          <small>年份：2019｜里程：65,000km｜方向盘：右｜港口：Kobe｜备注：拍卖评估 4</small>
+        </div>
+        <div class="tags"><span class="tag">Hybrid</span><span class="tag">MPV</span></div>
+      </div>
+      <div class="card">
+        <div class="thumb">车图 2 占位</div>
+        <div class="meta">
+          <strong>示例：Nissan Serena</strong>
+          <small>年份：2016｜里程：78,000km｜方向盘：右｜备注：家庭/商务两用</small>
+        </div>
+        <div class="tags"><span class="tag">Family</span><span class="tag">Export</span></div>
+      </div>
+      <div class="card">
+        <div class="thumb">车图 3 占位</div>
+        <div class="meta">
+          <strong>示例：Toyota RAV4</strong>
+          <small>年份：2019｜里程：52,000km｜方向盘：右｜备注：SUV 热门车型</small>
+        </div>
+        <div class="tags"><span class="tag">SUV</span><span class="tag">4WD</span></div>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top:18px">
+      <h2>4) 二手摩托车信息（示例）</h2>
+      <p>同样可以上传多台</p>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <div class="thumb"><!-- <img src="moto/moto1.jpg" alt="Moto 1"> -->摩托图 1 占位</div>
+        <div class="meta">
+          <strong>示例：Honda PCX</strong>
+          <small>年份：2020｜里程：12,000km｜排量：125cc｜备注：省油耐用</small>
+        </div>
+        <div class="tags"><span class="tag">125cc</span><span class="tag">Scooter</span></div>
+      </div>
+      <div class="card">
+        <div class="thumb">摩托图 2 占位</div>
+        <div class="meta">
+          <strong>示例：Yamaha NMAX</strong>
+          <small>年份：2019｜里程：18,000km｜排量：155cc｜备注：城市通勤</small>
+        </div>
+        <div class="tags"><span class="tag">155cc</span><span class="tag">Urban</span></div>
+      </div>
+      <div class="card">
+        <div class="thumb">摩托图 3 占位</div>
+        <div class="meta">
+          <strong>示例：Kawasaki Ninja</strong>
+          <small>年份：2018｜里程：22,000km｜排量：250cc｜备注：运动款</small>
+        </div>
+        <div class="tags"><span class="tag">Sport</span><span class="tag">250cc</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="section-title">
+      <h2>5) 联系我们</h2>
+      <p>支持中/英/日沟通</p>
+    </div>
+    <div class="contact">
+      <div class="card">
+        <strong>ETLAS 株式会社</strong>
+        <p class="note" style="margin:10px 0 0">
+          〒652-0801 兵庫県神戸市兵庫区上庄通3丁目1-1 2F-2D<br/>
+          Email: <a href="mailto:info@etlas.jp">info@etlas.jp</a><br/>
+          Website: <a href="index.html">etlas.jp</a>
+        </p>
+        <p class="note">你也可以把 WhatsApp / WeChat / 电话等联系方式加在这里。</p>
+      </div>
+
+      <div class="card">
+        <strong>询价表单（展示用）</strong>
+        <p class="note" style="margin-top:8px">当前是静态网页（不会真的发送）。如果你需要真正可提交的表单，我可以帮你接入 Google Form 或邮箱表单。</p>
+        <div class="field">
+          <label>姓名 / Company</label>
+          <input placeholder="请输入" />
+        </div>
+        <div class="field">
+          <label>联系方式（WhatsApp/Email）</label>
+          <input placeholder="请输入" />
+        </div>
+        <div class="field">
+          <label>需求（车型/预算/目的港）</label>
+          <textarea placeholder="例如：Toyota Voxy 2018-2020，预算XX，目的港：Dubai"></textarea>
+        </div>
+        <div class="field">
+          <a class="btn primary" href="mailto:info@etlas.jp?subject=Used%20Vehicles%20Inquiry%20from%20ETLAS.jp&body=Hello%20ETLAS%2C%0A%0AName%3A%0AContact%3A%0ARequest%3A%0A%0AThanks">用邮箱发送询价</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>© ETLAS. All rights reserved.</footer>
+</body>
+</html>

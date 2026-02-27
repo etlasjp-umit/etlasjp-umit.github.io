@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ETLAS | 选择业务</title>
+  <title data-i="lp.title">ETLAS | 选择业务</title>
   <meta name="description" content="ETLAS Group - Shiora & Used Vehicles" />
   <style>
     :root{
@@ -110,16 +110,27 @@
       <div class="logo" aria-hidden="true"></div>
       <h1>ETLAS</h1>
     </div>
-    <p class="sub">请选择要进入的业务板块</p>
+    <p class="sub" data-i="lp.subtitle">请选择要进入的业务板块</p>
+    <div style="display:flex;justify-content:center;margin-top:14px">
+      <label style="color:rgba(255,255,255,.70);font-size:13px;display:flex;gap:10px;align-items:center">
+        <span data-i="lp.lang">语言</span>
+        <select id="langSel" style="border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:rgba(255,255,255,.92);padding:8px 12px;outline:none">
+          <option value="en">English</option>
+          <option value="zh">中文</option>
+          <option value="ja">日本語</option>
+          <option value="tr">Türkçe</option>
+        </select>
+      </label>
+    </div>
 
     <section class="grid" aria-label="Business choices">
       <div class="choice">
         <div class="circle"><span>SHIORA</span></div>
         <div class="txt">
-          <h2>Shiora 保健品 & 化妆品系列</h2>
-          <p>进入 Shiora 品牌官网页面（现有页面）。</p>
+          <h2 data-i="lp.shiora.h">Shiora 保健品 & 化妆品系列</h2>
+          <p data-i="lp.shiora.p">进入 Shiora 品牌官网页面（现有页面）。</p>
           <div class="btnrow">
-            <a class="btn primary" href="shiora.html">进入 SHIORA</a>
+            <a class="btn primary" href="shiora.html" data-i="lp.shiora.btn">进入 SHIORA</a>
           </div>
         </div>
       </div>
@@ -127,10 +138,10 @@
       <div class="choice">
         <div class="circle"><span>ETLAS</span></div>
         <div class="txt">
-          <h2>ETLAS 二手车 / 二手摩托车</h2>
-          <p>进入车辆进出口业务介绍页面（新页面）。</p>
+          <h2 data-i="lp.etlas.h">ETLAS 二手车 / 二手摩托车</h2>
+          <p data-i="lp.etlas.p">进入车辆进出口业务介绍页面（新页面）。</p>
           <div class="btnrow">
-            <a class="btn primary" href="used-vehicles.html">进入 ETLAS 二手车</a>
+            <a class="btn primary" href="used-vehicles.html" data-i="lp.etlas.btn">进入 ETLAS 二手车</a>
           </div>
         </div>
       </div>
@@ -138,5 +149,125 @@
 
     <footer>© ETLAS. All rights reserved.</footer>
   </main>
+
+  <script>
+    // Simple i18n (zh/ja/tr/en) + auto detect by GeoIP (best effort) -> browser language -> English
+    const I18N = {
+      en: {
+        'lp.title': 'Choose a section',
+        'lp.subtitle': 'Please choose which business section to enter',
+        'lp.shiora.h': 'Shiora Supplements & Cosmetics',
+        'lp.shiora.p': 'Enter the Shiora brand page (current site).',
+        'lp.shiora.btn': 'Enter SHIORA',
+        'lp.etlas.h': 'ETLAS Used Cars / Motorcycles',
+        'lp.etlas.p': 'Enter the used-vehicles business page (new).',
+        'lp.etlas.btn': 'Enter ETLAS Used Vehicles',
+        'lp.lang': 'Language'
+      },
+      zh: {
+        'lp.title': '选择业务',
+        'lp.subtitle': '请选择要进入的业务板块',
+        'lp.shiora.h': 'SHIORA 保健品 & 化妆品系列',
+        'lp.shiora.p': '进入 Shiora 品牌官网页面（现有页面）。',
+        'lp.shiora.btn': '进入 SHIORA',
+        'lp.etlas.h': 'ETLAS 二手车 / 二手摩托车',
+        'lp.etlas.p': '进入车辆进出口业务介绍页面（新页面）。',
+        'lp.etlas.btn': '进入 ETLAS 二手车',
+        'lp.lang': '语言'
+      },
+      ja: {
+        'lp.title': 'セクション選択',
+        'lp.subtitle': 'ご希望の事業セクションを選択してください',
+        'lp.shiora.h': 'SHIORA 健康食品 & 化粧品',
+        'lp.shiora.p': 'Shiora ブランドページ（現行サイト）へ進みます。',
+        'lp.shiora.btn': 'SHIORA へ',
+        'lp.etlas.h': 'ETLAS 中古車 / 中古バイク',
+        'lp.etlas.p': '中古車・輸出入事業ページ（新規）へ進みます。',
+        'lp.etlas.btn': 'ETLAS 中古車へ',
+        'lp.lang': '言語'
+      },
+      tr: {
+        'lp.title': 'Bölüm seçimi',
+        'lp.subtitle': 'Lütfen girmek istediğiniz iş bölümünü seçin',
+        'lp.shiora.h': 'SHIORA Takviye & Kozmetik Serisi',
+        'lp.shiora.p': 'Mevcut Shiora marka sayfasına girin.',
+        'lp.shiora.btn': 'SHIORA’ya Gir',
+        'lp.etlas.h': 'ETLAS İkinci El Araç / Motosiklet',
+        'lp.etlas.p': 'Yeni ikinci el araç–motosiklet sayfasına girin.',
+        'lp.etlas.btn': 'ETLAS Araçlara Gir',
+        'lp.lang': 'Dil'
+      }
+    };
+
+    function normalizeLang(lang){
+      if(!lang) return 'en';
+      lang = lang.toLowerCase();
+      if(lang.startsWith('zh')) return 'zh';
+      if(lang.startsWith('ja')) return 'ja';
+      if(lang.startsWith('tr')) return 'tr';
+      return 'en';
+    }
+
+    async function geoDetectLang(timeoutMs=1400){
+      // Best-effort GeoIP detection. If blocked/fails, caller will fallback.
+      // Uses ipapi.co (free endpoint). You can replace with your own.
+      const controller = new AbortController();
+      const t = setTimeout(()=>controller.abort(), timeoutMs);
+      try{
+        const res = await fetch('https://ipapi.co/json/', {signal: controller.signal});
+        if(!res.ok) throw new Error('geoip bad status');
+        const data = await res.json();
+        const cc = (data && data.country_code) ? String(data.country_code).toUpperCase() : '';
+        if(cc === 'JP') return 'ja';
+        if(cc === 'TR') return 'tr';
+        // Mainland CN + HK + TW -> zh
+        if(cc === 'CN' || cc === 'HK' || cc === 'TW') return 'zh';
+        return 'en';
+      } finally {
+        clearTimeout(t);
+      }
+    }
+
+    function applyLang(lang){
+      const l = normalizeLang(lang);
+      document.documentElement.setAttribute('lang', l === 'zh' ? 'zh-CN' : l);
+      document.querySelectorAll('[data-i]').forEach(el=>{
+        const key = el.getAttribute('data-i');
+        const val = (I18N[l] && I18N[l][key]) || (I18N.en && I18N.en[key]) || '';
+        if(val){
+          // Prefer textContent for safety
+          el.textContent = val;
+        }
+      });
+      // Update selector UI
+      const sel = document.getElementById('langSel');
+      if(sel) sel.value = l;
+    }
+
+    async function detectAndApply(){
+      // Priority: saved choice -> GeoIP -> browser -> English
+      const saved = localStorage.getItem('etlas_lang');
+      if(saved){ applyLang(saved); return; }
+      try{
+        const g = await geoDetectLang();
+        applyLang(g);
+        return;
+      }catch(e){}
+      applyLang(navigator.language || navigator.userLanguage || 'en');
+    }
+
+    window.addEventListener('DOMContentLoaded', ()=>{
+      const sel = document.getElementById('langSel');
+      if(sel){
+        sel.addEventListener('change', ()=>{
+          const v = normalizeLang(sel.value);
+          localStorage.setItem('etlas_lang', v);
+          applyLang(v);
+        });
+      }
+      detectAndApply();
+    });
+  </script>
+
 </body>
 </html>

@@ -525,28 +525,59 @@
         <p class="note" data-i18n="contact.extra">你也可以把 WhatsApp / WeChat / 电话等联系方式加在这里。</p>
       </div>
 
-      <div class="card">
+            <div class="card">
         <strong data-i18n="form.title">询价表单（展示用）</strong>
         <p class="note" style="margin-top:8px" data-i18n="form.note">
           当前是静态网页（不会真的发送）。如果你需要真正可提交的表单，我可以帮你接入 Google Form 或邮箱表单。
         </p>
-        <div class="field">
-          <label data-i18n="form.name">姓名 / Company</label>
-          <input data-i18n-placeholder="form.namePh" placeholder="请输入" />
-        </div>
-        <div class="field">
-          <label data-i18n="form.contact">联系方式（WhatsApp/Email）</label>
-          <input data-i18n-placeholder="form.contactPh" placeholder="请输入" />
-        </div>
-        <div class="field">
-          <label data-i18n="form.request">需求（车型/预算/目的港）</label>
-          <textarea data-i18n-placeholder="form.requestPh" placeholder="例如：Toyota Voxy 2018-2020，预算XX，目的港：Dubai"></textarea>
-        </div>
-        <div class="field">
-          <a class="btn primary" id="mailtoBtn"
-             href="mailto:info@etlas.jp?subject=Used%20Vehicles%20Inquiry%20from%20ETLAS.jp&body=Hello%20ETLAS%2C%0A%0AName%3A%0AContact%3A%0ARequest%3A%0A%0AThanks"
-             data-i18n="form.mailBtn">用邮箱发送询价</a>
-        </div>
+
+        <!-- Google Form Integration (STATIC SITE FRIENDLY) -->
+        <!-- 1) Put your Google Form "formResponse" URL into GF_ACTION -->
+        <!-- 2) Put your entry IDs into GF_ENTRY_* below -->
+        <form id="gform" class="gform" action="#" method="POST" novalidate>
+          <div class="field">
+            <label data-i18n="form.name">姓名 / Company</label>
+            <input id="f_name" required data-i18n-placeholder="form.namePh" placeholder="请输入" />
+          </div>
+          <div class="field">
+            <label data-i18n="form.country">国家 / Country</label>
+            <input id="f_country" required data-i18n-placeholder="form.countryPh" placeholder="例如：Turkey / Japan / UAE" />
+          </div>
+          <div class="field">
+            <label data-i18n="form.contact">联系方式（WhatsApp/Email）</label>
+            <input id="f_contact" required data-i18n-placeholder="form.contactPh" placeholder="请输入" />
+          </div>
+          <div class="field">
+            <label data-i18n="form.model">车型 / Model</label>
+            <input id="f_model" required data-i18n-placeholder="form.modelPh" placeholder="例如：Toyota Voxy 2018-2020" />
+          </div>
+          <div class="field">
+            <label data-i18n="form.budget">预算 / Budget</label>
+            <input id="f_budget" data-i18n-placeholder="form.budgetPh" placeholder="例如：USD 8,000 / JPY 1,200,000" />
+          </div>
+          <div class="field">
+            <label data-i18n="form.port">目的港 / Destination Port</label>
+            <input id="f_port" required data-i18n-placeholder="form.portPh" placeholder="例如：Dubai / Jeddah / Mersin / Sydney" />
+          </div>
+          <div class="field">
+            <label data-i18n="form.request">需求补充 / Message</label>
+            <textarea id="f_message" data-i18n-placeholder="form.requestPh" placeholder="例如：Toyota Voxy 2018-2020，预算XX，目的港：Dubai"></textarea>
+          </div>
+
+          <div class="field">
+            <button class="btn primary" type="submit" id="submitBtn" data-i18n="form.submitBtn">提交询价</button>
+          </div>
+
+          <p class="note" id="formStatus" aria-live="polite" style="margin-top:10px"></p>
+
+          <div class="hint">
+            <span class="dot" aria-hidden="true"></span>
+            <div>
+              <div style="font-weight:800" data-i18n="form.hintTitle">已接入 Google 表单（需要填入 ID）</div>
+              <div data-i18n="form.hintBody">请把你的 Form 链接和 entry 编号填到页面底部的 GF_* 配置里。</div>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   </section>
@@ -612,7 +643,21 @@
           note:"当前是静态网页（不会真的发送）。如果你需要真正可提交的表单，我可以帮你接入 Google Form 或邮箱表单。",
           name:"姓名 / Company", contact:"联系方式（WhatsApp/Email）", request:"需求（车型/预算/目的港）",
           namePh:"请输入", contactPh:"请输入", requestPh:"例如：Toyota Voxy 2018-2020，预算XX，目的港：Dubai",
-          mailBtn:"用邮箱发送询价"
+          mailBtn:"用邮箱发送询价",
+          country:"国家 / Country",
+          model:"车型 / Model",
+          budget:"预算 / Budget",
+          port:"目的港 / Destination Port",
+          submitBtn:"提交询价",
+          countryPh:"例如：Turkey / Japan / UAE",
+          modelPh:"例如：Toyota Voxy 2018-2020",
+          budgetPh:"例如：USD 8,000 / JPY 1,200,000",
+          portPh:"例如：Dubai / Jeddah / Mersin / Sydney",
+          hintTitle:"已接入 Google 表单（需要填入 ID）",
+          hintBody:"请把你的 Form 链接和 entry 编号填到页面底部的 GF_* 配置里。",
+          sentOk:"已提交！我们会尽快联系你。",
+          sentFail:"提交失败：请稍后再试，或直接发邮件 info@etlas.jp"
+
         },
         ph: { flow:"这里放流程图/车辆照片", inspect:"这里放检查照片", port:"这里放船运/港口照片", moto:"这里放摩托照片", pack:"这里放整备照片", ship:"这里放运输照片" },
         footer: { copy:"© ETLAS. All rights reserved." },
@@ -678,7 +723,21 @@
           note:"This is a static page (it won’t submit). If you need a real form, we can connect Google Form or an email form.",
           name:"Name / Company", contact:"Contact (WhatsApp/Email)", request:"Request (model/budget/destination port)",
           namePh:"Type here", contactPh:"Type here", requestPh:"Example: Toyota Voxy 2018–2020, budget XX, destination port: Dubai",
-          mailBtn:"Send Inquiry by Email"
+          mailBtn:"Send Inquiry by Email",
+          country:"Country",
+          model:"Model",
+          budget:"Budget",
+          port:"Destination Port",
+          submitBtn:"Submit Inquiry",
+          countryPh:"e.g. Turkey / Japan / UAE",
+          modelPh:"e.g. Toyota Voxy 2018–2020",
+          budgetPh:"e.g. USD 8,000 / JPY 1,200,000",
+          portPh:"e.g. Dubai / Jeddah / Mersin / Sydney",
+          hintTitle:"Google Form is wired (fill IDs)",
+          hintBody:"Paste your Form link and entry numbers into the GF_* config at the bottom.",
+          sentOk:"Submitted! We’ll contact you soon.",
+          sentFail:"Submit failed. Please try again later or email info@etlas.jp"
+
         },
         ph: { flow:"Place a process image / vehicle photo here", inspect:"Place inspection photos here", port:"Place port/shipping photos here", moto:"Place motorcycle photo here", pack:"Place service/packing photos here", ship:"Place transport photos here" },
         footer: { copy:"© ETLAS. All rights reserved." },
@@ -744,7 +803,21 @@
           note:"Bu sayfa statiktir (göndermez). İsterseniz Google Form veya e‑posta formu bağlayabiliriz.",
           name:"Ad / Şirket", contact:"İletişim (WhatsApp/E‑posta)", request:"Talep (model/bütçe/varış limanı)",
           namePh:"Yazınız", contactPh:"Yazınız", requestPh:"Örn: Toyota Voxy 2018–2020, bütçe XX, varış limanı: Dubai",
-          mailBtn:"E‑posta ile Gönder"
+          mailBtn:"E‑posta ile Gönder",
+          country:"Ülke",
+          model:"Model",
+          budget:"Bütçe",
+          port:"Varış Limanı",
+          submitBtn:"Talebi Gönder",
+          countryPh:"Örn: Türkiye / Japonya / BAE",
+          modelPh:"Örn: Toyota Voxy 2018–2020",
+          budgetPh:"Örn: USD 8.000 / JPY 1.200.000",
+          portPh:"Örn: Dubai / Cidde / Mersin / Sidney",
+          hintTitle:"Google Form bağlı (ID gerekli)",
+          hintBody:"Form linkinizi ve entry numaralarını sayfanın altındaki GF_* ayarına yapıştırın.",
+          sentOk:"Gönderildi! En kısa sürede iletişime geçeceğiz.",
+          sentFail:"Gönderim başarısız. Lütfen sonra tekrar deneyin veya info@etlas.jp adresine e-posta atın."
+
         },
         ph: { flow:"Süreç görseli / araç fotoğrafı ekleyin", inspect:"Ekspertiz fotoğrafları ekleyin", port:"Liman/taşıma fotoğrafları ekleyin", moto:"Motosiklet fotoğrafı ekleyin", pack:"Servis/paketleme fotoğrafları ekleyin", ship:"Taşıma fotoğrafları ekleyin" },
         footer: { copy:"© ETLAS. Tüm hakları saklıdır." },
@@ -810,7 +883,21 @@
           note:"本ページは静的（送信されません）。実送信フォームが必要であれば、Googleフォームやメールフォームを接続できます。",
           name:"お名前 / 会社名", contact:"連絡先（WhatsApp/Email）", request:"ご要望（車種/予算/仕向港）",
           namePh:"入力してください", contactPh:"入力してください", requestPh:"例：Toyota Voxy 2018-2020、予算XX、仕向港：Dubai",
-          mailBtn:"メールで問い合わせ"
+          mailBtn:"メールで問い合わせ",
+          country:"国 / Country",
+          model:"車種 / Model",
+          budget:"予算 / Budget",
+          port:"仕向港 / Destination Port",
+          submitBtn:"問い合わせ送信",
+          countryPh:"例：Turkey / Japan / UAE",
+          modelPh:"例：Toyota Voxy 2018-2020",
+          budgetPh:"例：USD 8,000 / JPY 1,200,000",
+          portPh:"例：Dubai / Jeddah / Mersin / Sydney",
+          hintTitle:"Googleフォーム連携済み（ID入力が必要）",
+          hintBody:"フォームのリンクと entry 番号を、ページ下部の GF_* 設定に貼り付けてください。",
+          sentOk:"送信完了！折り返しご連絡します。",
+          sentFail:"送信できませんでした。時間を置いて再試行するか、info@etlas.jp へメールしてください。"
+
         },
         ph: { flow:"フロー図/車両写真を配置", inspect:"検査写真を配置", port:"港/輸送写真を配置", moto:"バイク写真を配置", pack:"整備/梱包写真を配置", ship:"輸送写真を配置" },
         footer: { copy:"© ETLAS. All rights reserved." },
@@ -936,6 +1023,7 @@
         btn.addEventListener("click", ()=>{
           const lang = btn.getAttribute("data-lang");
           applyI18n(lang);
+          setupGForm(lang);
 
           // keep URL clean but reflect lang for sharing
           const url = new URL(window.location.href);
@@ -945,9 +1033,86 @@
       });
     }
 
+        // ---- Google Form config (REPLACE THESE) ----
+    // Example action: https://docs.google.com/forms/d/e/1FAIpQLSeXXXX/formResponse
+    const GF_ACTION = "https://docs.google.com/forms/d/e/FORM_ID/formResponse";
+
+    // Replace entry IDs with your form's real entry.* numbers
+    const GF_ENTRY = {
+      name: "entry.111111111",
+      country: "entry.222222222",
+      contact: "entry.333333333",
+      model: "entry.444444444",
+      budget: "entry.555555555",
+      port: "entry.666666666",
+      message: "entry.777777777"
+    };
+
+    function setFormStatus(msg, ok){
+      const el = document.getElementById("formStatus");
+      if (!el) return;
+      el.textContent = msg || "";
+      el.style.color = ok ? "rgba(255,255,255,.80)" : "rgba(255,180,180,.90)";
+    }
+
+    function setupGForm(lang){
+      const form = document.getElementById("gform");
+      if (!form) return;
+
+      form.addEventListener("submit", async (e)=>{
+        e.preventDefault();
+
+        // Basic validation
+        const requiredIds = ["f_name","f_country","f_contact","f_model","f_port"];
+        for (const rid of requiredIds){
+          const inp = document.getElementById(rid);
+          if (inp && !inp.value.trim()){
+            inp.focus();
+            setFormStatus("⚠️ Please fill required fields.", false);
+            return;
+          }
+        }
+
+        // If not configured, show a helpful message
+        if (!GF_ACTION || GF_ACTION.includes("FORM_ID") || Object.values(GF_ENTRY).some(v=>String(v).includes("111111"))){
+          const dict = I18N[lang] || I18N.en;
+          setFormStatus("⚠️ Google Form is not configured yet. Please fill GF_ACTION and GF_ENTRY in the code.", false);
+          return;
+        }
+
+        const dict = I18N[lang] || I18N.en;
+
+        // Build form data
+        const fd = new FormData();
+        fd.append(GF_ENTRY.name, (document.getElementById("f_name")?.value || "").trim());
+        fd.append(GF_ENTRY.country, (document.getElementById("f_country")?.value || "").trim());
+        fd.append(GF_ENTRY.contact, (document.getElementById("f_contact")?.value || "").trim());
+        fd.append(GF_ENTRY.model, (document.getElementById("f_model")?.value || "").trim());
+        fd.append(GF_ENTRY.budget, (document.getElementById("f_budget")?.value || "").trim());
+        fd.append(GF_ENTRY.port, (document.getElementById("f_port")?.value || "").trim());
+        fd.append(GF_ENTRY.message, (document.getElementById("f_message")?.value || "").trim());
+
+        const btn = document.getElementById("submitBtn");
+        if (btn) btn.disabled = true;
+        setFormStatus("…", true);
+
+        try{
+          // Google Forms often blocks CORS from JS; using no-cors still submits successfully.
+          await fetch(GF_ACTION, { method:"POST", mode:"no-cors", body: fd });
+          setFormStatus(dict.form.sentOk || "Submitted!", true);
+          form.reset();
+        }catch(err){
+          setFormStatus(dict.form.sentFail || "Submit failed.", false);
+        }finally{
+          if (btn) btn.disabled = false;
+        }
+      });
+    }
+
     // Init
     const initial = detectLang();
     applyI18n(initial);
+    setupGForm(initial);
     setupLangButtons();
     setupActiveNav();
   </script>
